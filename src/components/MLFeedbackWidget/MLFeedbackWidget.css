@@ -1,0 +1,17 @@
+.container {
+    color: black;
+    background-color: white;
+    width: 250px;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+}
