@@ -1,47 +1,90 @@
 import React, { useState } from 'react';
+import { ThumbsDown, ThumbsUp } from 'react-feather';
+
+import axios from 'axios';
+
 import './MLFeedbackWidget.css';
 import TextareaAutosize from 'react-textarea-autosize';
 
-function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText }) {
-    const [isTextboxVisible, setIsTextboxVisble] = useState(false);
+function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, url }) {
+    const [feedback, setFeedback] = useState('');
     const [isFeedbackSent, setIsFeedbackSent] = useState(false);
+    const [hasBeenLiked, setHasBeenLiked] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
 
+    const handleFeedbackChange = (event) => {
+        setFeedback(event.target.value);
+    }
+
+    const sendFeedback = async () => {
+        const config = {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        const data = {
+            isLiked: isLiked,
+            feedback: feedback,
+        }
+        // posthog.capture('feedback-send-attempt')
+        axios.post(url, data, config)
+            .then((response) => {
+                // posthog.capture('feedback-send-success')
+                console.log(response);
+            })
+            .catch((error) => {
+                // posthog.capture('feedback-send-failure', {error: error})
+                console.log(error);
+            });
+    }
+
+    // TODO: maybe add logic to handle double clicking
     const like = () => {
-
-        setIsTextboxVisble(true);
+        setHasBeenLiked(true);
+        setIsLiked(true);
+        // posthog.capture('like-clicked');
     }
 
+    // TODO: maybe add logic to handle double clicking
     const dislike = () => {
-
-        setIsTextboxVisble(true);
+        setHasBeenLiked(true);
+        setIsLiked(false);
+        // posthog.capture('dislike-clicked');
     }
 
-    // make async when we have a server to send the feedback to
     const handleFeedbackSubmission = (event) => {
         event.preventDefault();
-        // something to send the feedback to the server
-        setIsTextboxVisble(false);
+        sendFeedback();
+        setHasBeenLiked(false);
         setIsFeedbackSent(true);
+        // posthog.capture('feedback-submit-clicked');
     }
+
+    const fill_dislike = (hasBeenLiked && !isLiked) ? '#f44336' : 'none';
+    const fill_like = (hasBeenLiked && isLiked) ? '#4CAF50' : 'none';
+
 
     return (
         <div>
             <div class="container">
                 {isFeedbackSent ?
                     <div>
-                        <p>{postSubmissionText}</p>
-                        <div>Checkmark icon</div>
+                        <p class="post-submission-text">{postSubmissionText}</p>
                     </div>
                     :
                     <div>
-                        <p>{widgetDescriptionText}</p>
+                        <p class="widget-description-text">{widgetDescriptionText}</p>
                         <div class="buttons">
-                            <button class="like-button" onClick={like}>Like</button>
-                            <button class="dislike-button" onClick={dislike}>Dislike</button>
+                            <button class="like-button" onClick={like}>
+                                <ThumbsUp fill={fill_like} />
+                            </button>
+                            <button class="dislike-button" onClick={dislike}>
+                                <ThumbsDown fill={fill_dislike} />
+                            </button>
                         </div>
-                        {isTextboxVisible && 
+                        {hasBeenLiked && 
                             <form class="feedback-form" onSubmit={handleFeedbackSubmission}>
-                                <TextareaAutosize class="text-box" placeholder="Please provide additional feedback" />
+                                <TextareaAutosize class="text-box" placeholder="Please provide additional feedback" value={feedback} onChange={handleFeedbackChange} />
                                 <input type="submit" class="submit-button" value="Submit" />
                             </form>
                         }

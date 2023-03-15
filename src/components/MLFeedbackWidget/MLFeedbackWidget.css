@@ -1,17 +1,91 @@
+input:focus, textarea:focus {
+    outline: none;
+}
+
 .container {
     color: black;
     background-color: white;
     width: 250px;
     border: 1px solid grey;
     border-radius: 10px;
+    padding: 10px;
+    text-align: center;
 }
 
 .buttons {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+
+    /* justify-content: space-around; */
+}
+
+.like-button {
+    border: none;
+    color: #4CAF50;
+    background-color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.dislike-button {
+    /* background-color: #f44336; */
+    border: none;
+    /* color: white; */
+    color: #f44336;
+    background-color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+/* .widget-description-text {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 0px;
+} */
+
+p {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+.post-submission-text {
+    margin-bottom: 0px;
 }
 
 .feedback-form {
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
+}
+
+.text-box {
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    border: none;
+    color: white;
+    background-color: #212121;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
 }
