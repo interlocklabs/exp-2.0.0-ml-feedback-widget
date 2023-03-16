@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { CheckCircle, ThumbsDown, ThumbsUp } from 'react-feather';
+import { ThumbsDown, ThumbsUp } from 'react-feather';
 
 import axios from 'axios';
 
-import './MLFeedbackWidget.css';
+import './index.css';
 import TextareaAutosize from 'react-textarea-autosize';
-
-// TODO: make thanks for feedback better
 
 function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, url }) {
     const [feedback, setFeedback] = useState('');
@@ -19,47 +17,45 @@ function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, url }) {
     }
 
     const sendFeedback = async () => {
-        const config = {
-            headers: {
-              'Content-Type': 'application/json'
+        if (url){
+            const config = {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }
+            const data = {
+                isLiked: isLiked,
+                feedback: feedback,
             }
-          }
-        const data = {
-            isLiked: isLiked,
-            feedback: feedback,
+            axios.post(url, data, config)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-        // posthog.capture('feedback-send-attempt')
-        axios.post(url, data, config)
-            .then((response) => {
-                // posthog.capture('feedback-send-success')
-                console.log(response);
-            })
-            .catch((error) => {
-                // posthog.capture('feedback-send-failure', {error: error})
-                console.log(error);
-            });
     }
 
     // TODO: maybe add logic to handle double clicking
     const like = () => {
         setHasBeenLiked(true);
         setIsLiked(true);
-        // posthog.capture('like-clicked');
+        sendFeedback();
     }
 
     // TODO: maybe add logic to handle double clicking
     const dislike = () => {
         setHasBeenLiked(true);
         setIsLiked(false);
-        // posthog.capture('dislike-clicked');
+        sendFeedback();
     }
 
     const handleFeedbackSubmission = (event) => {
         event.preventDefault();
-        sendFeedback();
         setHasBeenLiked(false);
         setIsFeedbackSent(true);
-        // posthog.capture('feedback-submit-clicked');
+        sendFeedback();
     }
 
     const fill_dislike = (hasBeenLiked && !isLiked) ? '#f44336' : 'none';
@@ -70,8 +66,7 @@ function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, url }) {
         <div>
             <div class="container">
                 {isFeedbackSent ?
-                    <div class="post-submission">
-                        <CheckCircle color={'green'} size={18} />
+                    <div>
                         <p class="post-submission-text">{postSubmissionText}</p>
                     </div>
                     :
@@ -79,10 +74,10 @@ function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, url }) {
                         <p class="widget-description-text">{widgetDescriptionText}</p>
                         <div class="buttons">
                             <button class="like-button" onClick={like}>
-                                <ThumbsUp fill={fill_like} size={18}/>
+                                <ThumbsUp fill={fill_like} />
                             </button>
                             <button class="dislike-button" onClick={dislike}>
-                                <ThumbsDown fill={fill_dislike} size={18}/>
+                                <ThumbsDown fill={fill_dislike} />
                             </button>
                         </div>
                         {hasBeenLiked && 
@@ -102,5 +97,5 @@ export default MLFeedbackWidget;
 
 MLFeedbackWidget.defaultProps = {
     widgetDescriptionText: 'Are these results relevant?',
-    postSubmissionText: 'Thanks for the feedback!'
+    postSubmissionText: 'Thank you for your feedback!'
 }
