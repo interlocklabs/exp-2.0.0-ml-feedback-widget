@@ -55,12 +55,14 @@
 .ml-widget-description-text {
     margin-bottom: 10px;
     margin-top: 0px;
+    font-size: 16px;
 }
 
 .ml-widget-post-submission-text {
     margin-bottom: 0px;
     margin-left: 5px;
     margin-top: 0px;
+    font-size: 16px;
 }
 
 .ml-widget-feedback-form {
