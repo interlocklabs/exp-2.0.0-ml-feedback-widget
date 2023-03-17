@@ -6,7 +6,7 @@ import axios from 'axios';
 import './index.css';
 import TextareaAutosize from 'react-textarea-autosize';
 
-function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, placeholderText, feedback_endpoint_url }) {
+function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, placeholderText, feedbackEndpointUrl }) {
     const [feedback, setFeedback] = useState('');
     const [isFeedbackSent, setIsFeedbackSent] = useState(false);
     const [hasBeenLiked, setHasBeenLiked] = useState(false);
@@ -29,7 +29,7 @@ function MLFeedbackWidget( { widgetDescriptionText, postSubmissionText, placehol
             isLiked: isLiked,
             feedback: feedback,
         }
-        axios.post(feedback_endpoint_url, data, config)
+        axios.post(feedbackEndpointUrl, data, config)
             .then((response) => {
                 console.log(response);
             })
