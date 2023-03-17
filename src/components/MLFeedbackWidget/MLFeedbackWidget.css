@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-input:focus, textarea:focus {
+.ml-widget-submit-button:focus, .ml-widget-text-box:focus {
     outline: none;
 }
 
-.container {
-    margin-top: 100px;
-    margin-left: 100px;
+.ml-widget-container {
     color: #43484e;
     background-color: white;
     font-weight: 500;
@@ -21,41 +19,32 @@ input:focus, textarea:focus {
     font-family: Montserrat, sans-serif;
 }
 
-.buttons {
+.ml-widget-buttons {
     display: flex;
     flex-direction: row;
     justify-content: center;
-
-    /* justify-content: space-around; */
 }
 
-.like-button {
+.ml-widget-like-button {
     border: none;
-    /* color: #4CAF50; */
     color: #43484e;
     background-color: white;
-    /* padding: 10px 20px; */
-    /* text-align: center; */
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     padding: 0px;
     margin: 0px;
+    margin-right: 5px;
     cursor: pointer;
-    /* border-radius: 10px; */
 }
 
-.dislike-button {
-    /* background-color: #f44336; */
+.ml-widget-dislike-button {
     color: #43484e;
     border: none;
-    /* color: white; */
-    /* color: #f44336; */
     background-color: white;
     padding: 0px;
     margin: 0px;
-    /* padding: 10px 20px; */
-    /* text-align: center; */
+    margin-left: 5px;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
@@ -63,45 +52,38 @@ input:focus, textarea:focus {
     border-radius: 10px;
 }
 
-/* .widget-description-text {
-    text-align: center;
-    margin-bottom: 10px;
-    margin-top: 0px;
-} */
-
-p {
-    /* text-align: center; */
+.ml-widget-description-text {
     margin-bottom: 10px;
     margin-top: 0px;
 }
 
-.post-submission-text {
+.ml-widget-post-submission-text {
     margin-bottom: 0px;
     margin-left: 5px;
+    margin-top: 0px;
 }
 
-.feedback-form {
+.ml-widget-feedback-form {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
 }
 
-/* change the color of the text in the box and in the */
-.text-box {
+.ml-widget-text-box {
     border: 1px solid #f0f2f4;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
     font-family: Montserrat, sans-serif;
+    color: #43484e;
     font-weight: 500;
 }
 
-.submit-button {
+.ml-widget-submit-button {
     border: none;
     color: white;
     background-color: #353b41;
     padding: 5px;
-    /* text-align: center; */
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
@@ -109,7 +91,7 @@ p {
     border-radius: 5px;
 }
 
-.post-submission{
+.ml-widget-post-submission{
     display: flex; 
     flex-direction: row;
 }
