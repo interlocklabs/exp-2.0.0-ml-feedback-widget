@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# ml-feedback-widget
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The ML Feedback Widget is a simple, easy-to-use React component that you can add to your ML products/projects to get feedback from customers on the results of your production models.
 
-In the project directory, you can run:
+We built this because production ML evaluation tends to be based on how the model affects product metrics and KPIs rather than model metrics. 
 
-### `npm start`
+We are building a hosted version with integrations and custom styling so you can easily parse this feedback, connect it with your models, pipe it to your favorite data warehouse/lake/store/BI tool, and use it to improve your models in the future. If this interests you, please [email us](founders@tryinterlock.com).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Demo
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Here's a [live demo](https://ml-feedback-demo.vercel.app/) of the widget in a potential environment. Here's the [code](https://github.com/interlocklabs/ml_feedback_demo) for the demo.
 
-### `npm test`
+![ML Widget screenshot](https://i.imgur.com/zmHZJP8.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+With npm:  `npm install ml-feedback-widget --save`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Front-end 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```javascript
+import MLFeedbackWidget from 'ml-feedback-widget';
 
-### `npm run eject`
+function App() {
+	return (
+		<div className="App">
+			<MLFeedbackWidget feedbackEndpointUrl={'https://yourdomain.com/endpoint}/>
+		</div>
+	);
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Back-end
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To use this widget, you will need to write a `POST` API endpoint with the following params in `application/json` format: 
+- `isLiked`, boolean
+- `feedback`, string
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Here is an example one such endpoint written in Python 3.10 using the Flask framework:
+```python
+feedback = [{'uid': 0, 'is_liked': False, 'feedback_text': 'None of these are relevant...'}]
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+@app.route('/webhook', methods=['POST'])
+@cross_origin()
+def webhook():
+	new_feedback_entry = {
+		'uid': len(feedback),
+		'is_liked': request.json['isLiked'],
+		'feedback_text': request.json['feedback']
+	}
+	feedback.append(new_feedback_entry)
+	return jsonify({'feedback': list(feedback)})
+```
 
-## Learn More
+The code for the above endpoint can be found [here](https://github.com/interlocklabs/ml_feedback_demo/blob/main/webhook/app.py).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Props
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The component has three props:
+ - `feedbackEndpointUrl`: This is the endpoint (which you will need to write) where the widget will send the feedback. Change this to pipe this data to your database/warehouse/lake/BI tools. If you want these connectors out of the box, please post an issue or [email us](mailto:founders@tryinterlock.com).
+ - `widgetDescriptionText`: This is a string which is initially displayed which asks the user to leave their feedback.
+ - `postSubmissionText`: the string which is displayed after the user submits their feedback.
+ - `placeholderText`: the placeholder text displayed in the text area where users optionally input additional feedback on the results they see.
